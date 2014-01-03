@@ -5,7 +5,7 @@ unique string is guaranteed to be stored once and only once.
 
 intern is go-gettable:
 
-  go get github.com/BurntSushi/intern
+    go get github.com/BurntSushi/intern
 
 Documentation can be found on 
 [godoc.org](http://godoc.org/github.com/BurntSushi/intern).
