@@ -3,6 +3,7 @@ tag:
 
 fmt:
 	gofmt -w *.go
+	colcheck *.go
 
 push:
 	git push origin master
