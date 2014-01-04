@@ -8,10 +8,10 @@ import (
 
 const (
 	numStrings = 10000
-	shortLo = 5
-	shortHi = 7
-	longLo = 40
-	longHi = 50
+	shortLo    = 5
+	shortHi    = 7
+	longLo     = 40
+	longHi     = 50
 )
 
 func init() {
@@ -20,80 +20,54 @@ func init() {
 
 func TestInterner(t *testing.T) {
 	type test struct {
-		strs []string
-		indices map[string]int
-		length int
+		strs    []string
+		indices map[string]Atom
+		length  int
 	}
 	tests := []test{
-		{ []string{}, map[string]int{}, 0 },
-		{ nil, nil, 0 },
-		{ []string{"a", "b"}, map[string]int{"a": 0, "b": 1}, 2 },
-		{ []string{"a", "b", "a"}, map[string]int{"a": 0, "b": 1}, 2 },
+		{[]string{}, map[string]Atom{}, 0},
+		{nil, nil, 0},
+		{[]string{"a", "b"}, map[string]Atom{"a": 0, "b": 1}, 2},
+		{[]string{"a", "b", "a"}, map[string]Atom{"a": 0, "b": 1}, 2},
 	}
 	for i, test := range tests {
 		in := NewInterner()
-		in.Atomize(test.strs...)
+		in.Atoms(test.strs...)
 		if in.Len() != test.length {
 			t.Fatalf("[test %d]: Length should be %d but is %d.",
 				i, test.length, in.Len())
 		}
 		for str, idx := range test.indices {
-			if idx != in.Index(str) {
-				t.Fatalf("[test %d]: Index for '%s' should be %d but is %d.",
-					i, str, idx, in.Index(str))
+			if idx != in.Atom(str) {
+				t.Fatalf("[test %d]: Atom for '%s' should be %d but is %d.",
+					i, str, idx, in.Atom(str))
 			}
 		}
 	}
 }
 
-func BenchmarkInternerIndexLong(b *testing.B) {
+func BenchmarkInternerAtomLong(b *testing.B) {
 	in := NewInterner()
 	strs := randomStrings(numStrings, longLo, longHi)
-	in.Atomize(strs...)
+	in.Atoms(strs...)
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
 		for _, str := range strs {
-			in.Index(str)
+			in.Atom(str)
 		}
 	}
 }
 
-func BenchmarkInternerRIndexLong(b *testing.B) {
-	in := NewInterner()
-	strs := randomStrings(numStrings, longLo, longHi)
-	in.Atomize(strs...)
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		for _, str := range strs {
-			in.RIndex(str)
-		}
-	}
-}
-
-func BenchmarkInternerIndexShort(b *testing.B) {
+func BenchmarkInternerAtomShort(b *testing.B) {
 	in := NewInterner()
 	strs := randomStrings(numStrings, shortLo, shortHi)
-	in.Atomize(strs...)
+	in.Atoms(strs...)
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
 		for _, str := range strs {
-			in.Index(str)
-		}
-	}
-}
-
-func BenchmarkInternerRIndexShort(b *testing.B) {
-	in := NewInterner()
-	strs := randomStrings(numStrings, shortLo, shortHi)
-	in.Atomize(strs...)
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		for _, str := range strs {
-			in.RIndex(str)
+			in.Atom(str)
 		}
 	}
 }
@@ -116,5 +90,5 @@ func randomString(min, max int) string {
 }
 
 func randomRange(lo, hi int) int {
-	return lo + rand.Intn(hi - lo)
+	return lo + rand.Intn(hi-lo)
 }
