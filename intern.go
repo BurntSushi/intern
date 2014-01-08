@@ -74,7 +74,7 @@ func (in *Interner) Len() int {
 // Strings returns a slice copy of all the strings that have been interned.
 func (in *Interner) Strings() []string {
 	strs := make([]string, 0, in.Len())
-	for str, _ := range in.Atms {
+	for str := range in.Atms {
 		strs = append(strs, str)
 	}
 	return strs
