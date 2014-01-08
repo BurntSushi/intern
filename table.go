@@ -41,6 +41,16 @@ func NewTable(numAtoms int) *Table {
 	}}
 }
 
+// NewTableInterner creates a new dense table from a pre-existing string
+// interner.
+func NewTableInterner(in *Interner) *Table {
+	return &Table{table{
+		in,
+		make([]float64, in.Len()*in.Len()),
+		in.Len(),
+	}}
+}
+
 // Get retrieves the value corresponding to the string pair (as atoms) given.
 // The order of the string pair does not matter.
 func (t *Table) Get(a1, a2 Atom) float64 {
