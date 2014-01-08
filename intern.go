@@ -13,8 +13,8 @@ type Atom int
 //
 // An Interner may not be used from multiple goroutines simultaneously.
 //
-// Interner satisfies the encoding.TextMarshaler and encoding.TextUnmarshaler
-// interfaces.
+// Interner satisfies all interfaces defined in the `encoding` standard library
+// package.
 type Interner struct {
 	interner
 }
